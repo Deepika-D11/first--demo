@@ -1,0 +1,310 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Deepika-D11/first--demo/blob/main/hate%20speech%20detection%202\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "MV8jV-TGdodB"
+      },
+      "outputs": [],
+      "source": [
+        "#!pip install pysentimiento\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Load** **Packages**"
+      ],
+      "metadata": {
+        "id": "J52Bwr9Jeift"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pysentimiento import create_analyzer"
+      ],
+      "metadata": {
+        "id": "uU6WWjEReh-2"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Emotion  Detection**"
+      ],
+      "metadata": {
+        "id": "VZSsCSnIexVa"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "emotion = create_analyzer(task='emotion',lang='en')\n",
+        "result = emotion.predict(\"get out of my sight \")\n",
+        "result.output"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "F4o2TGvNe32C",
+        "outputId": "ad4d0370-52c9-4f4c-cd8b-29845480084b"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'anger'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 6
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def emotion_detection(text):\n",
+        "  emotion = create_analyzer(task='emotion',lang='en')\n",
+        "  result = emotion.predict(text)\n",
+        "  return result.output\n",
+        "emotion_detection(\"today i am very happy\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "8eF22t4mfnGd",
+        "outputId": "ae561bcd-a4b1-47de-f110-b43312ab6ad6"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'joy'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 12
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**hate speech detection**"
+      ],
+      "metadata": {
+        "id": "2SO57IO_hyzO"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "hatespeech= create_analyzer(task='hate_speech' , lang= 'en')\n",
+        "result = hatespeech.predict(\"I hate eating apples. thats why i dont want to sit eith apple seller\")\n",
+        "next (iter(result.probas.items()),None)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "oKmF3osUh5cz",
+        "outputId": "7dda2898-82f5-4aed-885a-99c0ec19b528"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.10/dist-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884\n",
+            "  warnings.warn(\n"
+          ]
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "('hateful', 0.030702410265803337)"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 23
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def hatespeech_detection(text):\n",
+        "  hatespeech = create_analyzer(task='hate_speech', lang='en')\n",
+        "  result = hatespeech.predict(text)\n",
+        "  return next(iter(result.probas.items()),None)\n",
+        "hatespeech_detection(\"I hate eating apples. that's why i don't want to sit with appple seller\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "0IOBQewbmCcd",
+        "outputId": "d91e71ee-d541-42b9-ba17-d9ed083ee2b4"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "('hateful', 0.030125711113214493)"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 25
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "\n",
+        "#predictive System\n"
+      ],
+      "metadata": {
+        "id": "r6CLQXK4tisz"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "text = \"\"\"I woke up this morning feeling incredibly happy and grateful for the beautiful weather outside.\n",
+        " The sun was shining, birds were singing, and there was a gentle breeze in the air. It felt like the\n",
+        " perfect day to go for a long walk in the park.\"\"\""
+      ],
+      "metadata": {
+        "id": "hiEK85UQtfaY"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [],
+      "metadata": {
+        "id": "PAZY0pIUtg7B"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "emo = emotion_detection(text)\n",
+        "hate = hatespeech_detection(text)\n",
+        "\n",
+        "print(\"Emotion :\", emo)\n",
+        "print(\"Speech :\", hate)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Yzw0sqFbuSkS",
+        "outputId": "eafac984-776d-4cec-c1dc-9ce63b011ddd"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Emotion : joy\n",
+            "Speech : ('hateful', 0.01586860790848732)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Example 2:\n",
+        "text = \"\"\"In the evening, I decided to unwind by watching a comedy show. The hilarious jokes and witty banter lifted my spirits, and I found myself laughing uncontrollably.\n",
+        " Laughter truly is the best medicine, and it was the perfect way to end the day on a positive note.\n",
+        "\"\"\""
+      ],
+      "metadata": {
+        "id": "HmtwxTv-ud0V"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "emo = emotion_detection(text)\n",
+        "hate = hatespeech_detection(text)\n",
+        "\n",
+        "print(\"Emotion :\", emo)\n",
+        "print(\"Speech :\", hate)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "AS8_X_eUuhy2",
+        "outputId": "201d40d3-a603-4654-ec21-01764467b25b"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Emotion : joy\n",
+            "Speech : ('hateful', 0.014117322862148285)\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
